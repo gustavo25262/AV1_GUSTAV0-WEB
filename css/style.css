@@ -1,0 +1,13 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+#mensagemErro {
+    color:red;
+    margin-top: 10px;
+}
+
+ul {
+    margin-top:20px;
+}
