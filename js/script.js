@@ -6,7 +6,7 @@ const lista = document.querySelector("#listaTarefas");
 const mensagemErro = document.querySelector("#mensagemErro");
 
 function validarTarefa(texto) {
-    if (texto.trim() === "") {
+    if (!texto || texto.trim() === "") {
         mensagemErro.textContent = "Digite uma tarefa válida.";
         return false;
     }
@@ -28,24 +28,49 @@ function renderTarefas() {
         // Botão editar
         const btnEditar = document.createElement("button");
         btnEditar.textContent = "Editar";
-        btnEditar.onclick = function() {
-            const novoTexto = prompt("Edite sua tarefa:", tarefa);
 
-            if (validarTarefa(novoTexto)) {
-                tarefas[index] = novoTexto.trim();
+        btnEditar.onclick = function() {
+            // limpa o li
+            li.innerHTML = "";
+
+            // input para edição
+            const inputEdit = document.createElement("input");
+            inputEdit.type = "text";
+            inputEdit.value = tarefa;
+
+            // botão salvar
+            const btnSalvar = document.createElement("button");
+            btnSalvar.textContent = "Salvar";
+
+            btnSalvar.onclick = function() {
+                if (validarTarefa(inputEdit.value)) {
+                    tarefas[index] = inputEdit.value.trim();
+                    renderTarefas();
+                }
+            };
+
+            // botão cancelar
+            const btnCancelar = document.createElement("button");
+            btnCancelar.textContent = "Cancelar";
+
+            btnCancelar.onclick = function() {
                 renderTarefas();
-            }
+            };
+
+            li.appendChild(inputEdit);
+            li.appendChild(btnSalvar);
+            li.appendChild(btnCancelar);
         };
 
         // Botão excluir
         const btnExcluir = document.createElement("button");
         btnExcluir.textContent = "Excluir";
+
         btnExcluir.onclick = function() {
             tarefas.splice(index, 1);
             renderTarefas();
         };
 
-        // Adicionando tudo no li
         li.appendChild(span);
         li.appendChild(btnEditar);
         li.appendChild(btnExcluir);
@@ -64,7 +89,6 @@ form.addEventListener("submit", function(event) {
     }
 
     tarefas.push(texto.trim());
-
     renderTarefas();
 
     input.value = "";
