@@ -1,13 +1,92 @@
 body {
     font-family: Arial, sans-serif;
+    background-color: #002f6c; /* azul marinho do Remo */
+    color: white;
     padding: 20px;
+    text-align: center;
 }
 
+/* Título */
+h1 {
+    margin-bottom: 20px;
+}
+
+/* Formulário */
+form {
+    margin-bottom: 15px;
+}
+
+input {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    width: 250px;
+    outline: none;
+}
+
+/* Botões */
+button {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: none;
+    background-color: white;
+    color: #002f6c;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: 0.2s;
+}
+
+button:hover {
+    background-color: #cfe0ff;
+}
+
+/* Lista */
+ul {
+    margin-top: 20px;
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    background-color: white;
+    color: #002f6c;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 10px;
+    width: 300px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Botões da lista */
+li button {
+    margin-left: 5px;
+    background-color: #002f6c;
+    color: white;
+}
+
+li button:hover {
+    background-color: #001f4d;
+}
+
+/* Mensagem de erro */
 #mensagemErro {
-    color:red;
+    color: #ffcccc;
     margin-top: 10px;
 }
 
-ul {
-    margin-top:20px;
+/* ESCUDO (apenas UMA versão, limpa e correta) */
+body::before {
+    content: "";
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/3/3e/Clube_do_Remo_escudo.png");
+    background-size: 120px;
+    background-repeat: no-repeat;
+    position: fixed;
+    top: 10px;
+    left: 10px; /* agora no canto esquerdo */
+    width: 120px;
+    height: 120px;
+    opacity: 0.15;
 }
