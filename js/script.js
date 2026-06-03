@@ -1,214 +1,138 @@
 "use strict";
 
-// ---- Referências ao DOM ----
-const form         = document.querySelector("#formTarefa");
-const input        = document.querySelector("#inputTarefa");
-const lista        = document.querySelector("#listaTarefas");
-const mensagemErro = document.querySelector("#mensagemErro");
-const btnCarregar  = document.querySelector("#btnCarregarAPI");
-const btnLimpar    = document.querySelector("#btnLimpar");
-const loading      = document.querySelector("#loading");
-const alertaErro   = document.querySelector("#alertaErro");
-const textoErro    = document.querySelector("#textoErro");
-const semTarefas   = document.querySelector("#semTarefas");
-
-// ---- Estado ----
 const tarefas = [];
 let proximoId = 1;
 
 const API_URL = "https://jsonplaceholder.typicode.com/todos?_limit=10";
 
-// ---- Auxiliares ----
-function setLoading(ativo) {
-  loading.classList.toggle("d-none", !ativo);
-}
-
-function setErroAPI(mensagem) {
-  if (mensagem) {
-    textoErro.textContent = mensagem;
-    alertaErro.classList.remove("d-none");
-  } else {
-    alertaErro.classList.add("d-none");
-  }
-}
-
-function validarTarefa(texto) {
-  if (!texto || texto.trim() === "") {
-    mensagemErro.textContent = "⚠️ Digite uma tarefa válida.";
-    input.focus();
-    return false;
-  }
-  mensagemErro.textContent = "";
-  return true;
-}
+const form = document.querySelector("#formTarefa");
+const input = document.querySelector("#inputTarefa");
+const lista = document.querySelector("#listaTarefas");
+const btnCarregar = document.querySelector("#btnCarregarAPI");
+const btnLimpar = document.querySelector("#btnLimpar");
+const loading = document.querySelector("#loading");
+const alertaErro = document.querySelector("#alertaErro");
+const semTarefas = document.querySelector("#semTarefas");
 
 function atualizarEstadoVazio() {
   semTarefas.classList.toggle("d-none", tarefas.length > 0);
 }
 
-// ---- Renderização ----
 function renderTarefas() {
   lista.innerHTML = "";
 
-  tarefas.forEach(function (tarefa, index) {
+  tarefas.forEach((tarefa, index) => {
     const li = document.createElement("li");
     li.className = "list-group-item" + (tarefa.concluida ? " concluida" : "");
 
-    const span = document.createElement("span");
-    span.className = "tarefa-texto";
-    span.textContent = tarefa.texto;
+    const link = document.createElement("a");
+
+    link.className = "tarefa-texto";
+
+    link.textContent = tarefa.texto;
 
     if (tarefa.origem === "api") {
-      const badge = document.createElement("span");
-      badge.className = "badge-api";
-      badge.textContent = "API";
-      span.appendChild(badge);
+      link.href = `detalhes.html?id=${tarefa.idApi}`;
     }
 
     const acoes = document.createElement("div");
     acoes.className = "tarefa-acoes";
 
-    const btnConcluir = document.createElement("button");
-    btnConcluir.className = tarefa.concluida ? "btn btn-sm btn-secondary" : "btn btn-sm btn-success";
-    btnConcluir.innerHTML = tarefa.concluida
-      ? '<i class="bi bi-arrow-counterclockwise"></i> <span>Desfazer</span>'
-      : '<i class="bi bi-check-lg"></i> <span>Concluir</span>';
-    btnConcluir.onclick = function () {
+    const concluir = document.createElement("button");
+
+    concluir.className = "btn btn-success btn-sm";
+
+    concluir.textContent = "✓";
+
+    concluir.onclick = () => {
       tarefas[index].concluida = !tarefas[index].concluida;
+
       renderTarefas();
     };
 
-    const btnEditar = document.createElement("button");
-    btnEditar.className = "btn btn-sm btn-warning";
-    btnEditar.innerHTML = '<i class="bi bi-pencil"></i> <span>Editar</span>';
-    btnEditar.onclick = function () { ativarEdicao(li, index); };
+    const excluir = document.createElement("button");
 
-    const btnExcluir = document.createElement("button");
-    btnExcluir.className = "btn btn-sm btn-danger";
-    btnExcluir.innerHTML = '<i class="bi bi-trash"></i> <span>Excluir</span>';
-    btnExcluir.onclick = function () {
+    excluir.className = "btn btn-danger btn-sm";
+
+    excluir.textContent = "X";
+
+    excluir.onclick = () => {
       tarefas.splice(index, 1);
+
       renderTarefas();
-      atualizarEstadoVazio();
     };
 
-    acoes.appendChild(btnConcluir);
-    acoes.appendChild(btnEditar);
-    acoes.appendChild(btnExcluir);
+    acoes.appendChild(concluir);
+    acoes.appendChild(excluir);
 
-    li.appendChild(span);
+    li.appendChild(link);
     li.appendChild(acoes);
+
     lista.appendChild(li);
   });
 
   atualizarEstadoVazio();
 }
 
-function ativarEdicao(li, index) {
-  li.innerHTML = "";
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
 
-  const inputEdit = document.createElement("input");
-  inputEdit.type = "text";
-  inputEdit.className = "input-edicao";
-  inputEdit.value = tarefas[index].texto;
-  inputEdit.focus();
+  if (input.value.trim() === "") return;
 
-  const acoes = document.createElement("div");
-  acoes.className = "tarefa-acoes";
-
-  const btnSalvar = document.createElement("button");
-  btnSalvar.className = "btn btn-sm btn-primary";
-  btnSalvar.innerHTML = '<i class="bi bi-floppy"></i> <span>Salvar</span>';
-  btnSalvar.onclick = function () {
-    if (validarTarefa(inputEdit.value)) {
-      tarefas[index].texto = inputEdit.value.trim();
-      mensagemErro.textContent = "";
-      renderTarefas();
-    }
-  };
-
-  inputEdit.addEventListener("keydown", function (e) {
-    if (e.key === "Enter") btnSalvar.click();
-    if (e.key === "Escape") renderTarefas();
+  tarefas.push({
+    id: proximoId++,
+    texto: input.value.trim(),
+    concluida: false,
+    origem: "local",
   });
 
-  const btnCancelar = document.createElement("button");
-  btnCancelar.className = "btn btn-sm btn-secondary";
-  btnCancelar.innerHTML = '<i class="bi bi-x-lg"></i> <span>Cancelar</span>';
-  btnCancelar.onclick = function () { renderTarefas(); };
+  input.value = "";
 
-  acoes.appendChild(btnSalvar);
-  acoes.appendChild(btnCancelar);
+  renderTarefas();
+});
 
-  li.appendChild(inputEdit);
-  li.appendChild(acoes);
-}
+async function carregarAPI() {
+  loading.classList.remove("d-none");
 
-// ---- Consumo de API com fetch + async/await ----
-async function carregarDaAPI() {
-  setLoading(true);
-  setErroAPI(null);
   btnCarregar.disabled = true;
 
   try {
     const response = await fetch(API_URL);
 
     if (!response.ok) {
-      throw new Error(`Erro HTTP ${response.status}: ${response.statusText}`);
+      throw new Error("Erro na API");
     }
 
     const dados = await response.json();
 
-    dados.forEach(function (item) {
+    dados.forEach((item) => {
       tarefas.push({
-        id:        proximoId++,
-        texto:     item.title,
+        id: proximoId++,
+        idApi: item.id,
+        texto: item.title,
         concluida: item.completed,
-        origem:    "api",
+        origem: "api",
       });
     });
 
     renderTarefas();
+  } catch (error) {
+    alertaErro.textContent = error.message;
 
-  } catch (erro) {
-    setErroAPI("Não foi possível carregar os dados da API. " + erro.message);
-    console.error("Erro ao consumir API:", erro);
+    alertaErro.classList.remove("d-none");
   } finally {
-    setLoading(false);
+    loading.classList.add("d-none");
+
     btnCarregar.disabled = false;
   }
 }
 
-// ---- Eventos ----
-form.addEventListener("submit", function (event) {
-  event.preventDefault();
+btnCarregar.addEventListener("click", carregarAPI);
 
-  const texto = input.value;
-  if (!validarTarefa(texto)) return;
-
-  tarefas.push({
-    id:        proximoId++,
-    texto:     texto.trim(),
-    concluida: false,
-    origem:    "local",
-  });
-
-  renderTarefas();
-  input.value = "";
-  input.focus();
-});
-
-btnCarregar.addEventListener("click", function () {
-  carregarDaAPI();
-});
-
-btnLimpar.addEventListener("click", function () {
-  if (tarefas.length === 0) return;
-  if (!confirm("Deseja realmente remover todas as tarefas?")) return;
+btnLimpar.addEventListener("click", () => {
   tarefas.length = 0;
+
   renderTarefas();
-  setErroAPI(null);
 });
 
-// ---- Inicialização ----
 atualizarEstadoVazio();

@@ -1,34 +1,27 @@
 :root {
-  --azul:       #002f6c;
-  --azul-claro: #1a4f99;
+  --azul: #002f6c;
+  --branco: #fff;
   --azul-hover: #001f4d;
-  --branco:     #ffffff;
-  --borda:      rgba(255, 255, 255, 0.15);
-  --sombra:     0 4px 24px rgba(0, 0, 0, 0.35);
-}
-
-*, *::before, *::after {
-  box-sizing: border-box;
 }
 
 body {
-  font-family: 'Nunito', sans-serif;
-  background-color: var(--azul);
+  font-family: "Nunito", sans-serif;
+  background: var(--azul);
   color: var(--branco);
   min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
 }
 
 .escudo-bg {
   position: fixed;
   inset: 0;
+
   background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Clube_do_Remo.svg/250px-Clube_do_Remo.svg.png");
+
   background-repeat: no-repeat;
-  background-position: center center;
+  background-position: center;
   background-size: 420px;
+
   opacity: 0.05;
-  pointer-events: none;
   z-index: 0;
 }
 
@@ -37,183 +30,101 @@ body {
   z-index: 1;
 }
 
-.escudo-header {
-  width: 90px;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
-  transition: transform 0.3s ease;
-}
-
-.escudo-header:hover {
-  transform: scale(1.08) rotate(-3deg);
-}
-
 .display-titulo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(2.4rem, 6vw, 4rem);
-  letter-spacing: 0.06em;
-  color: var(--branco);
-  margin-bottom: 0.1rem;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 4rem;
+  letter-spacing: 3px;
 }
 
 .subtitulo {
-  font-size: 0.85rem;
-  letter-spacing: 0.2em;
+  opacity: 0.6;
   text-transform: uppercase;
-  opacity: 0.55;
-  margin-bottom: 0;
+  letter-spacing: 2px;
+}
+
+.escudo-header {
+  width: 90px;
 }
 
 .input-remo {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-  border: 1px solid var(--borda) !important;
-  color: var(--branco) !important;
-  border-radius: 10px 0 0 10px !important;
-  font-family: 'Nunito', sans-serif;
-  font-size: 1rem;
-  transition: background 0.2s, border-color 0.2s;
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: white !important;
 }
 
 .input-remo::placeholder {
-  color: rgba(255,255,255,0.45);
-}
-
-.input-remo:focus {
-  background-color: rgba(255, 255, 255, 0.18) !important;
-  border-color: rgba(255,255,255,0.45) !important;
-  box-shadow: 0 0 0 0.2rem rgba(255,255,255,0.1) !important;
-  color: var(--branco) !important;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .btn-remo {
-  background-color: var(--branco);
+  background: white;
   color: var(--azul);
-  font-family: 'Nunito', sans-serif;
-  font-weight: 700;
-  border-radius: 0 10px 10px 0 !important;
-  border: none;
-  transition: background 0.2s, transform 0.1s;
+  font-weight: bold;
 }
 
 .btn-remo:hover {
-  background-color: #d6e8ff;
-  color: var(--azul-hover);
-  transform: scale(1.02);
-}
-
-.btn-remo:active {
-  transform: scale(0.98);
+  background: #d8e8ff;
 }
 
 .btn-outline-remo {
-  border: 1px solid rgba(255,255,255,0.4);
-  color: var(--branco);
-  background: transparent;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 600;
-  border-radius: 8px;
-  transition: all 0.2s;
+  border: 1px solid white;
+  color: white;
 }
 
 .btn-outline-remo:hover {
-  background-color: rgba(255,255,255,0.12);
-  border-color: var(--branco);
-  color: var(--branco);
+  background: white;
+  color: var(--azul);
 }
 
 .lista-remo {
-  gap: 10px;
   display: flex;
   flex-direction: column;
-}
-
-.lista-remo .list-group-item {
-  background-color: rgba(255, 255, 255, 0.93);
-  color: var(--azul);
-  border: none;
-  border-radius: 10px !important;
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   gap: 10px;
-  box-shadow: var(--sombra);
-  animation: slideIn 0.25s ease;
-  font-weight: 600;
 }
 
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(-8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.lista-remo .list-group-item.concluida .tarefa-texto {
-  text-decoration: line-through;
-  opacity: 0.4;
-}
-
-.badge-api {
-  font-size: 0.65rem;
-  background-color: var(--azul);
-  color: var(--branco);
-  border-radius: 4px;
-  padding: 2px 6px;
-  margin-left: 6px;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  vertical-align: middle;
-  white-space: nowrap;
+.list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border: none !important;
+  border-radius: 10px !important;
 }
 
 .tarefa-texto {
   flex: 1;
-  font-size: 0.95rem;
-  word-break: break-word;
-  transition: opacity 0.2s, text-decoration 0.2s;
+  text-decoration: none;
+  color: var(--azul);
+  font-weight: 700;
+}
+
+.tarefa-texto:hover {
+  text-decoration: underline;
+}
+
+.concluida .tarefa-texto {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.badge-api {
+  background: var(--azul);
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
 }
 
 .tarefa-acoes {
   display: flex;
   gap: 6px;
-  flex-shrink: 0;
 }
 
-.tarefa-acoes .btn {
-  padding: 4px 9px;
-  font-size: 0.78rem;
-  border-radius: 7px;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 700;
+.card {
+  border: none;
+  border-radius: 12px;
 }
 
-.input-edicao {
-  flex: 1;
-  border: 1px solid var(--azul-claro);
-  border-radius: 6px;
-  padding: 4px 8px;
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.9rem;
+.card-body {
   color: var(--azul);
-  outline: none;
-}
-
-.input-edicao:focus {
-  box-shadow: 0 0 0 2px rgba(0,47,108,0.2);
-}
-
-.spinner-border {
-  width: 2rem;
-  height: 2rem;
-}
-
-#alertaErro {
-  border-radius: 10px;
-  font-weight: 600;
-}
-
-@media (max-width: 480px) {
-  .tarefa-acoes .btn span {
-    display: none;
-  }
 }
